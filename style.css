@@ -1,0 +1,40 @@
+.nav_ul {
+    /*position: fixed;
+    top:0;*/
+    background-color: #858585;
+    list-style-type: none ;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.nav_itm .nav_a{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    float: left;
+    overflow: hidden;
+}
+
+.nav_itm:hover {
+    background-color: #555;
+    color: white;
+}
+
+form{
+    text-align: center;
+}
+label {
+    display: inline-block;
+    width: 130px;
+    text-align: left;
+}
+input:not([type="submit"]) {
+    display: inline-block;
+    margin: 2px auto;
+    width: 40%;
+    box-sizing: border-box;
+}
