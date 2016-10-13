@@ -21,9 +21,10 @@ else {
         }
         catch(PDOException $e)
         {
-            if ($e == 1062)
+            if ($e->errorInfo[1] == 1062)
                 echo "user exists";
-            echo $e;
+            else
+                echo $e->getMessage();
         }
     }
 }

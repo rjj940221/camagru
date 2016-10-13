@@ -1,5 +1,6 @@
 <?php
 include_once ("config/database.php");
+session_start();
 
 if ($_POST['login'] !== "login")
     echo "Error";
@@ -13,8 +14,13 @@ else{
             $stat->bindParam(':email', $_POST['email']);
             $stat->execute();
             $row = $stat->fetch(PDO::FETCH_ASSOC);
-            if (password_verify($_POST['pass'], $row['pass']))
-                $_SESSION['logged_on_user'] == $row['id'];
+            if (password_verify($_POST['pass'], $row['pass'])) {
+                $_SESSION['logged_on_user'] = $row['id'];
+                echo "login successful";
+                print_r($_SESSION);
+                header("location:index.php");
+            }
+
             else
                 echo "login failed";
         }

@@ -10,7 +10,20 @@
 }
 
 .nav_itm .nav_a{
+    font-size: large;
     display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    float: left;
+    overflow: hidden;
+}
+
+.nav_itm .nav_btn{
+    font-size: large;
+    border: none;
+    display: inline-block;
     color: white;
     text-align: center;
     padding: 14px 16px;
@@ -22,6 +35,27 @@
 .nav_itm:hover {
     background-color: #555;
     color: white;
+}
+
+#capture {
+    border: black solid 1px;
+    width: 60%;
+    float: left;
+    margin: 1% auto;
+    padding: 1%;
+}
+#upload {
+    border: black solid 1px;
+    width: 35%;
+    float: right;
+    margin: 1% auto;
+    padding: 1%;
+    text-align: center;
+}
+
+.img_thumb {
+    width:50px;
+    height:50px;
 }
 
 form{
