@@ -18,13 +18,38 @@ else {
             $stat->bindParam(':pass', $pass);
             $stat->execute();
             echo "<br/>done";
+            sendmail($_POST['email']);
         }
         catch(PDOException $e)
         {
-            if ($e->errorInfo[1] == 1062)
-                echo "user exists";
-            else
-                echo $e->getMessage();
+            if ($e->errorInfo[1] == 1062){
+                try {
+                    $dpo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+                    $dpo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $stat = $dpo->prepare("SELECT `active` FROM `tb_users` WHERE `email`=:email;");
+                    $stat->bindParam(':email', $_POST['email']);
+                    $stat->execute();
+                    $active = $stat->fetchColumn();
+                    if ($active == false) {
+                        sendmail($_POST['email']);
+                        echo "we have sent you an email";
+                    }
+                    else
+                        echo "user exists";
+                }
+                catch (PDOException $e)
+                {
+                    echo "Database not working";
+                }
+            }
+            //else
+                //echo $e->getMessage();
         }
     }
+}
+
+function sendmail($email)
+{
+    $mh = hash('whirlpool',"some random".$_POST['email']."text");
+    mail($_POST['email'], "Confirm registration to camagru","http://localhost:8080/camagru/confirmation.php?mh=".$mh."&mp=".$_POST['email']);
 }

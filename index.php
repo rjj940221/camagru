@@ -19,6 +19,9 @@ if (isset($_SESSION['logged_on_user'])) {
             <div class='over'><img class='over_img' src='overlays/boarder1.png'></div>
             <div class='over'><img class='over_img' src='overlays/boarder2.png'></div>
             <div class='over'><img class='over_img' src='overlays/boarder3.png'></div>
+            <div class='over'><img class='over_img' src='overlays/boarder4.png'></div>
+            <div class='over'><img class='over_img' src='overlays/boarder5.png'></div>
+            <div class='over'><img class='over_img' src='overlays/boarder6.png'></div>
     </div>
     <div id='upload'>
         <form action='' enctype='multipart/form-data'>

@@ -10,7 +10,7 @@ else{
     else {
         $pdo = new PDO($DB_DSN,$DB_USER,$DB_PASSWORD, $PDO_ATT);
         try {
-            $stat = $pdo->prepare("SELECT * from tb_users WHERE email = :email;");
+            $stat = $pdo->prepare("SELECT * from tb_users WHERE email = :email AND active=TRUE;");
             $stat->bindParam(':email', $_POST['email']);
             $stat->execute();
             $row = $stat->fetch(PDO::FETCH_ASSOC);

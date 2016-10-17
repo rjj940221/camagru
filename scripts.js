@@ -11,6 +11,7 @@
     var upbtn = null;
 
     function startup() {
+        console.log("startup run");
         video = document.getElementById('video');
         canvas = document.getElementById('canvas');
 
@@ -43,12 +44,10 @@
             }
         );
 
-        video.addEventListener('canplay', function (ev) {
+        video.addEventListener('canplay', function () {
             if (!streaming) {
                 height = video.videoHeight / (video.videoWidth / width);
 
-                // Firefox currently has a bug where the height can't be read from
-                // the video, so we will make assumptions if this happens.
 
                 if (isNaN(height)) {
                     height = width / (4 / 3);
@@ -81,7 +80,8 @@
                     for (var i = 0; i < image.files.length; i++) {
                         var file = image.files[i];
                         var data = new FormData;
-                        data.append("image",file);
+                        data.append("image", file);
+                        data.append("overlay", over);
                         xhttp.onreadystatechange = function () {
                             if (xhttp.readyState == 4 && this.status == 200) {
                                 console.log("hi " + xhttp.responseText);
@@ -99,22 +99,29 @@
         });
 
         init_overlays();
-
         load_user_images();
-
+        set_overlays();
         clearphoto();
     }
 
     function init_overlays() {
         var i;
-        var over = document.getElementsByClassName("over_img");
-        for (i = 0; i < over.length;i++)
-        {
-            over[i].addEventListener('click', function chose_overlay(){
+        var doc_over = document.getElementsByClassName("over_img");
+        for (i = 0; i < doc_over.length; i++) {
+            doc_over[i].addEventListener('click', function () {
                 over = this.src;
                 console.log(over);
                 upbtn.disabled = false;
                 startbutton.disabled = false;
+            });
+        }
+        doc_over = document.getElementsByClassName("over");
+        for (i = 0; i < doc_over.length; i++) {
+            /*console.log("set height to: "+doc_over.style.width);
+             doc_over[i].style.height = doc_over.clientWidth / (3/4);*/
+            doc_over[i].addEventListener('click', function () {
+                set_overlays();
+                this.style.backgroundColor = "darkgray";
             });
         }
     }
@@ -123,9 +130,8 @@
         console.log("set over run");
         var i;
         var over = document.getElementsByClassName("over");
-        for (i = 0; i < over.length;i++)
-        {
-            over[i].style.backgroundColor = "wight";
+        for (i = 0; i < over.length; i++) {
+            over[i].style.backgroundColor = "white";
         }
     }
 
@@ -144,8 +150,8 @@
 
             var url = "save_snap.php";
             var data = canvas.toDataURL('image/png');
-            console.log(data);
-            data = "img=" + data;
+            //console.log(data);
+            data = "img=" + data + "&over_name=" + over;
 
             xhttp.onreadystatechange = function () {
                 if (xhttp.readyState == 4 && this.status == 200) {
@@ -173,7 +179,6 @@
         }
         xhttp.onreadystatechange = function () {
             if (xhttp.readyState == 4 && this.status == 200) {
-                //console.log("hi " + xhttp.responseText);
                 if (xhttp.responseText != false) {
                     var display = JSON.parse(xhttp.responseText);
                     display.forEach(function (data, index) {
@@ -195,4 +200,10 @@
     }
 
     window.addEventListener('load', startup, false);
+    /*var cap = document.getElementById("capture");
+    console.log("cap set " +cap);
+    if (cap) {
+        console.log("cap set " +cap);
+        startup();
+    }*/
 })();

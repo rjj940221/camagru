@@ -4,10 +4,6 @@ session_start();
 function overlay_save($user, $over,$user_width, $user_height,$DB_DSN, $DB_USER, $DB_PASSWORD)
 {
     if (isset($_SESSION['logged_on_user'])) {
-
-        //$over = file_get_contents("overlays/boarder2.png");
-        //$over = imagecreatefromstring($over);
-        //list($user_width, $user_height) = getimagesizefromstring($user_str);
         $over = imagescale($over, $user_width, $user_height, IMG_BILINEAR_FIXED);
         imagecopymerge_alpha($user, $over, 0, 0, 0, 0, $user_width, $user_height, 100);
 
