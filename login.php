@@ -15,6 +15,7 @@ include_once ('header.php');
         <br/>
         <input type="submit" name="login" value="login">
     </form>
+    <a href="create_reset.php">Forgot Password?</a>
 </div>
 </body>
 </html>

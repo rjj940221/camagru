@@ -19,7 +19,7 @@ include_once('header.php');
         $data = $dpo->query("SELECT * FROM `tb_images`;");
         if ($data) {
             foreach ($data as $row) {
-                echo "<div class='gallery_div'><img class='gallery_img' src='data:image/png;base64," . $row['image'] . "'/></div>";
+                echo "<div class='gallery_div'><img data-image='".$row['id']."' class='gallery_img' src='data:image/png;base64," . $row['image'] . "'/></div>";
             }
         } else {
             echo "failure";
@@ -42,7 +42,7 @@ include_once('header.php');
             <div id='gallery_dialog_action'>
                 <?php
                 if (isset($_SESSION['logged_on_user'])) {
-                    echo "";
+                    echo "<button class='gallery_dialog_action' id='gallery_dialog_like'>like</button>";
                 } else
                     echo "login for more options"
                 ?>
@@ -50,7 +50,10 @@ include_once('header.php');
             <div id="gallery_dialog_add_comment">
                 <?php
                 if (isset($_SESSION['logged_on_user'])) {
-                    echo "";
+                    echo "
+                        <textarea id='gallery_dialog_add_comment_txt' ></textarea>
+                        <button id='gallery_dialog_add_comment_btn'>Post Comment</button>
+";
                 } else
                     echo "login to leave a comment";
                 ?>
