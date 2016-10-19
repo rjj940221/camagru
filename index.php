@@ -45,5 +45,15 @@ if (isset($_SESSION['logged_on_user'])) {
 } else
     echo "Login for more features.";
 ?>
+<div id="dialog_back" >
+    <div id="index_dialog" class="dialog">
+        <div id="index_dialog_content">
+            <div id="index_dialog_image">
+                <img id="index_dialog_img" src="" alt="failed to load image data">
+            </div>
+            <button id="index_dialog_delete">Delete</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

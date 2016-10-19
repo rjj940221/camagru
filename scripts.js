@@ -9,6 +9,7 @@
     var startbutton = null;
     var xhttp = false;
     var upbtn = null;
+    var image_id = null;
 
     function startup() {
         console.log("startup run");
@@ -98,6 +99,33 @@
             }
         });
 
+        document.getElementById('dialog_back').addEventListener('click', function (event) {
+            if (event.target == document.getElementById('dialog_back')) {
+                this.style.visibility = 'hidden';
+            }
+        });
+
+        document.getElementById('index_dialog_delete').addEventListener('click', function () {
+            var dell_xhttp = new XMLHttpRequest();
+            var send_data = "image_id="+image_id;
+
+            dell_xhttp.onreadystatechange = function () {
+
+                if (dell_xhttp.readyState == 4 && xhttp.status == 200){
+                    console.log("delete: "+dell_xhttp.responseText);
+                    if (dell_xhttp.responseText == "true") {
+                        console.log();
+                        load_user_images();
+                        document.getElementById('dialog_back').style.visibility='hidden';
+                    }
+                }
+            };
+            console.log(send_data);
+            dell_xhttp.open('POST', 'delete_image.php');
+            dell_xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            dell_xhttp.send(send_data);
+        });
+
         init_overlays();
         load_user_images();
         set_overlays();
@@ -181,10 +209,19 @@
             if (xhttp.readyState == 4 && this.status == 200) {
                 if (xhttp.responseText != false) {
                     var display = JSON.parse(xhttp.responseText);
+                    console.log(display);
                     display.forEach(function (data, index) {
                         var img = document.createElement("IMG");
-                        img.setAttribute("src", data);
+                        img.setAttribute("src", data['image_data']);
                         img.setAttribute("class", "img_thumb");
+                        img.setAttribute("data-image", data['id']);
+                        img.addEventListener('click', function () {
+                            var dialog = document.getElementById('dialog_back');
+                            document.getElementById('index_dialog_img').src = this.src;
+                            image_id = this.getAttribute("data-image");
+                            console.log("image id set to: "+image_id);
+                            dialog.style.visibility = 'visible';
+                        });
                         div.appendChild(img);
                     });
                 }

@@ -27,6 +27,7 @@ if (isset($_POST['reset_email']) && $_POST['reset_sub'] == "reset") {
                 $setstat = true;
                 $stat2->bindParam(':reset', $setstat);
                 $stat2->bindParam(':id', $id);
+                $stat2->execute();
             }
             catch (PDOException $e)
             {

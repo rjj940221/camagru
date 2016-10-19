@@ -1,15 +1,13 @@
 (function () {
-    //var xhttp = null;
+
     var image_id = null;
 
     function start() {
-
-
         var i;
         var gall_img = document.getElementsByClassName("gallery_img");
+
         for (i = 0; i < gall_img.length; i++) {
             gall_img[i].addEventListener('click', function () {
-                //console.log("gallery image clicked");
                 var dialog = document.getElementById('dialog_back');
                 var img = document.getElementById('gallery_dialog_img');
                 image_id = this.getAttribute("data-image");
@@ -20,10 +18,10 @@
                 dialog.style.visibility = 'visible';
             });
         }
+
         document.getElementById('dialog_back').addEventListener('click', function (event) {
             if (event.target == document.getElementById('dialog_back')) {
                 this.style.visibility = 'hidden';
-                //document.getElementById('gallery_dialog_like').removeEventListener('click');
             }
         });
 
@@ -114,26 +112,6 @@
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send(send_data);
 
-            /*like.addEventListener('click', function () {
-             var send_data = "image_id=" + image_id;
-             xhttp.onreadystatechange = function () {
-             if (xhttp.readyState == 4 && this.status == 200) {
-             console.log("set like " + xhttp.responseText);
-             if (xhttp.responseText == false) {
-             like.disabled = false;
-             }
-             if (xhttp.responseText == true) {
-             like.disabled = true;
-             }
-             }
-             if (this.status == 500) {
-             console.log("ho oh " + xhttp.responseText);
-             }
-             };
-             xhttp.open("POST", "add_like.php");
-             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-             xhttp.send(send_data);
-             });*/
         }
     }
 
