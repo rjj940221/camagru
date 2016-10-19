@@ -9,8 +9,8 @@
 include_once('header.php');
 ?>
 <div id="gallery">
-    <?php
-    include_once('config/database.php');
+    <!--<?php
+    /*include_once('config/database.php');
 
     try {
         $dpo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
@@ -27,8 +27,13 @@ include_once('header.php');
 
     } catch (PDOException $e) {
         echo $e->errorInfo;
-    }
-    ?>
+    }*/
+    ?>-->
+</div>
+<div id='pager'>
+    <ul class="pagination">
+
+    </ul>
 </div>
 <div id="dialog_back" >
     <div id="gallery_dialog" class="dialog">

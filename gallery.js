@@ -1,11 +1,37 @@
 (function () {
 
     var image_id = null;
+    var images = null;
+    var num_imag;
+    var gallery;
 
     function start() {
-        var i;
-        var gall_img = document.getElementsByClassName("gallery_img");
+        var xhttp = new XMLHttpRequest();
+         gallery= document.getElementById("gallery");
 
+        xhttp.onreadystatechange = function () {
+          if (xhttp.readyState == 4 && xhttp.status == 200){
+              if (xhttp.responseText !== "false") {
+                  images = JSON.parse(xhttp.responseText);
+                  num_imag = images.length;
+                  set_pager();
+              }
+          }
+          if (xhttp.status == 500)
+          {
+              var text = document.createTextNode("We are having trouble with our database");
+              var h2 = document.createElement("H2");
+              h2.appendChild(text);
+              gallery.appendChild(h2);
+          }
+        };
+        xhttp.open('GET', 'load_gallery.php');
+        xhttp.setRequestHeader("content-typ", "plain/text");
+        xhttp.send();
+
+
+        /*var gall_img = document.getElementsByClassName("gallery_img");
+        var i;
         for (i = 0; i < gall_img.length; i++) {
             gall_img[i].addEventListener('click', function () {
                 var dialog = document.getElementById('dialog_back');
@@ -17,7 +43,7 @@
                 set_like();
                 dialog.style.visibility = 'visible';
             });
-        }
+        }*/
 
         document.getElementById('dialog_back').addEventListener('click', function (event) {
             if (event.target == document.getElementById('dialog_back')) {
@@ -50,6 +76,66 @@
             });
         }
         like_add_event();
+        set_page(1);
+    }
+
+    function set_pager() {
+        var num_pages = num_imag / 12;
+        var i;
+
+        for(i = 1; i <num_pages; i++)
+        {
+            var page_index = document.createElement('LI');
+            var page_btn = document.createElement('DIV');
+            if (i == 1)
+                page_btn.setAttribute("class", "active");
+            page_btn.setAttribute("data-index", i+"");
+            page_btn.addEventListener('click', function () {
+                var active = document.getElementsByClassName('active');
+                var j;
+                for (j = 0; j < active; j++)
+                {
+                    active[j].className = "";
+                }
+               set_page(this.getAttribute("data-index"));
+                this.setAttribute("class", "active");
+            });
+            var text = document.createTextNode(i + "");
+            page_btn.appendChild(text);
+            page_index.appendChild(page_btn);
+        }
+    }
+
+    function set_page(index) {
+        var max = index *10;
+        var i;
+
+        while (gallery.hasChildNodes()) {
+            gallery.removeChild(gallery.lastChild)
+        }
+
+        for (i = (index - 1) *10; i < max; i++)
+        {
+        //<div class='gallery_div'><img data-image='".$row['id']."' class='gallery_img' src='data:image/png;base64," . $row['image'] . "'/></div>
+            var div = document.createElement("DIV");
+            div.setAttribute("class", "gallery_div");
+            var img = document.createElement("IMG");
+            img.setAttribute("class","gallery_img");
+            img.setAttribute("src","data:image/png;base64,"+images[i]['image']);
+            img.setAttribute("data-image", images[i]['id']);
+            img.addEventListener('click', function () {
+                var dialog = document.getElementById('dialog_back');
+                var img = document.getElementById('gallery_dialog_img');
+                image_id = this.getAttribute("data-image");
+
+                img.src = this.src;
+                load_comments();
+                set_like();
+                dialog.style.visibility = 'visible';
+            });
+            div.appendChild(img);
+            gallery.appendChild(div)
+        }
     }
 
     function load_comments() {
