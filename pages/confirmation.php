@@ -1,14 +1,11 @@
-<html>
-<header>
-    <title>camagru</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-</header>
-<body>
+
 <?php
-include_once ('header.php');
-include_once ('config/database.php');
-//print_r($_GET);
-//print_r($_SESSION);
+include_once('header.php');
+?>
+<div id="content">
+    <?php
+include_once('../config/database.php');
+
 if (isset($_GET['mp']) && isset($_GET['mh']) && hash('whirlpool',"some random".$_GET['mp']."text") == $_GET['mh'])
 {
     try {
@@ -30,4 +27,8 @@ if (isset($_GET['mp']) && isset($_GET['mh']) && hash('whirlpool',"some random".$
 else
     echo "<h2>Ohps somthing seems to have gon wrong</h2>";
     ?>
+    </div>
+<div id="footer">
+    <div id="footer_content">camagru&#169;<i>rojones</i></div>
+</div>
 </body>

@@ -6,122 +6,109 @@
     var gallery;
 
     function start() {
+
         var xhttp = new XMLHttpRequest();
-         gallery= document.getElementById("gallery");
+        gallery = document.getElementById("gallery");
+        if (gallery) {
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    if (xhttp.responseText !== "false") {
+                        images = JSON.parse(xhttp.responseText);
+                        num_imag = images.length;
 
-        xhttp.onreadystatechange = function () {
-          if (xhttp.readyState == 4 && xhttp.status == 200){
-              if (xhttp.responseText !== "false") {
-                  images = JSON.parse(xhttp.responseText);
-                  num_imag = images.length;
-                  set_pager();
-              }
-          }
-          if (xhttp.status == 500)
-          {
-              var text = document.createTextNode("We are having trouble with our database");
-              var h2 = document.createElement("H2");
-              h2.appendChild(text);
-              gallery.appendChild(h2);
-          }
-        };
-        xhttp.open('GET', 'load_gallery.php');
-        xhttp.setRequestHeader("content-typ", "plain/text");
-        xhttp.send();
+                        document.getElementById('dialog_back').addEventListener('click', function (event) {
+                            if (event.target == document.getElementById('dialog_back')) {
+                                this.style.visibility = 'hidden';
+                            }
+                        });
 
-
-        /*var gall_img = document.getElementsByClassName("gallery_img");
-        var i;
-        for (i = 0; i < gall_img.length; i++) {
-            gall_img[i].addEventListener('click', function () {
-                var dialog = document.getElementById('dialog_back');
-                var img = document.getElementById('gallery_dialog_img');
-                image_id = this.getAttribute("data-image");
-
-                img.src = this.src;
-                load_comments();
-                set_like();
-                dialog.style.visibility = 'visible';
-            });
-        }*/
-
-        document.getElementById('dialog_back').addEventListener('click', function (event) {
-            if (event.target == document.getElementById('dialog_back')) {
-                this.style.visibility = 'hidden';
-            }
-        });
-
-        var comment = document.getElementById('gallery_dialog_add_comment_btn');
-        if (comment) {
-            comment.addEventListener('click', function () {
-                var xhttp = new XMLHttpRequest();
-                var text = document.getElementById('gallery_dialog_add_comment_txt').value;
-                console.log(text);
-                if (text) {
-                    var send_data = "image_id=" + image_id + "&comment=" + text;
-                    xhttp.onreadystatechange = function () {
-                        if (xhttp.readyState == 4 && xhttp.status == 200) {
-                            console.log("succes text" + xhttp.responseText);
-                            load_comments();
-                            document.getElementById('gallery_dialog_add_comment_txt').value = "";
+                        var comment = document.getElementById('gallery_dialog_add_comment_btn');
+                        if (comment) {
+                            comment.addEventListener('click', function () {
+                                var xhttp = new XMLHttpRequest();
+                                var text = document.getElementById('gallery_dialog_add_comment_txt').value;
+                                console.log(text);
+                                if (text) {
+                                    var send_data = "image_id=" + image_id + "&comment=" + text;
+                                    xhttp.onreadystatechange = function () {
+                                        if (xhttp.readyState == 4 && xhttp.status == 200) {
+                                            console.log("succes text" + xhttp.responseText);
+                                            load_comments();
+                                            document.getElementById('gallery_dialog_add_comment_txt').value = "";
+                                        }
+                                        if (xhttp.status == 500) {
+                                            console.log("error in submitting comment");
+                                        }
+                                    };
+                                    xhttp.open("POST", "/camagru/phpscripts/postcomment.php");
+                                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                    xhttp.send(send_data);
+                                }
+                            });
                         }
-                        if (xhttp.status == 500) {
-                            console.log("error in submitting comment");
-                        }
-                    };
-                    xhttp.open("POST", "postcomment.php");
-                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xhttp.send(send_data);
+                        like_add_event();
+                        set_page(1);
+                        set_pager();
+                    }
                 }
-            });
+                if (xhttp.status == 500) {
+                    var text = document.createTextNode("We are having trouble with our database");
+                    var h2 = document.createElement("H2");
+                    h2.appendChild(text);
+                    gallery.appendChild(h2);
+                }
+            };
+            xhttp.open('GET', '/camagru/phpscripts/load_gallery.php');
+            xhttp.setRequestHeader("content-typ", "plain/text");
+            xhttp.send();
         }
-        like_add_event();
-        set_page(1);
     }
 
     function set_pager() {
-        var num_pages = num_imag / 12;
+        console.log("running set pager");
+        var num_pages = Math.ceil(num_imag / 12);
         var i;
 
-        for(i = 1; i <num_pages; i++)
-        {
+        console.log("num pages: " + num_pages);
+
+        for (i = 1; i <= num_pages; i++) {
+            console.log("making pager");
             var page_index = document.createElement('LI');
             var page_btn = document.createElement('DIV');
             if (i == 1)
                 page_btn.setAttribute("class", "active");
-            page_btn.setAttribute("data-index", i+"");
+            page_btn.setAttribute("data-index", i + "");
             page_btn.addEventListener('click', function () {
                 var active = document.getElementsByClassName('active');
                 var j;
-                for (j = 0; j < active; j++)
-                {
+                for (j = 0; j < active.length; j++) {
+                    console.log("remove active class");
                     active[j].className = "";
                 }
-               set_page(this.getAttribute("data-index"));
+                set_page(this.getAttribute("data-index"));
                 this.setAttribute("class", "active");
             });
             var text = document.createTextNode(i + "");
             page_btn.appendChild(text);
             page_index.appendChild(page_btn);
+            document.getElementById('pager_list').appendChild(page_index);
         }
     }
 
     function set_page(index) {
-        var max = index *10;
+        var max = index * 12;
         var i;
 
         while (gallery.hasChildNodes()) {
             gallery.removeChild(gallery.lastChild)
         }
 
-        for (i = (index - 1) *10; i < max; i++)
-        {
-        //<div class='gallery_div'><img data-image='".$row['id']."' class='gallery_img' src='data:image/png;base64," . $row['image'] . "'/></div>
+        for (i = (index - 1) * 12; i < max && i < num_imag; i++) {
             var div = document.createElement("DIV");
             div.setAttribute("class", "gallery_div");
             var img = document.createElement("IMG");
-            img.setAttribute("class","gallery_img");
-            img.setAttribute("src","data:image/png;base64,"+images[i]['image']);
+            img.setAttribute("class", "gallery_img");
+            img.setAttribute("src", "data:image/png;base64," + images[i]['image']);
             img.setAttribute("data-image", images[i]['id']);
             img.addEventListener('click', function () {
                 var dialog = document.getElementById('dialog_back');
@@ -168,7 +155,7 @@
                 console.log("ho oh " + xhttp.responseText);
             }
         };
-        xhttp.open("POST", "getcomments.php");
+        xhttp.open("POST", "/camagru/phpscripts/getcomments.php");
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send(send_data);
     }
@@ -194,7 +181,7 @@
                     console.log("ho oh " + xhttp.responseText);
                 }
             };
-            xhttp.open("POST", "is_liked.php");
+            xhttp.open("POST", "/camagru/phpscripts/is_liked.php");
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send(send_data);
 
@@ -222,7 +209,7 @@
                         console.log("ho oh " + xhttp.responseText);
                     }
                 };
-                xhttp.open("POST", "add_like.php");
+                xhttp.open("POST", "/camagru/phpscripts/add_like.php");
                 xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 xhttp.send(send_data);
             });

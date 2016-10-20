@@ -3,7 +3,7 @@
 if (isset($_POST['image_id']) && isset($_POST['comment']))
 {
     session_start();
-    include_once ('config/database.php');
+    include_once('../config/database.php');
     try {
         $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -11,7 +11,6 @@ if (isset($_POST['image_id']) && isset($_POST['comment']))
         $stat->bindParam(':user_id', $_SESSION['logged_on_user']);
         $stat->bindParam(':comment', $_POST['comment']);
         $stat->bindParam(':image_id', $_POST['image_id']);
-        echo $stat->queryString;
         $stat->execute();
     }
     catch (PDOException $e) {

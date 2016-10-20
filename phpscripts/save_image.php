@@ -1,5 +1,7 @@
 <?php
 session_start();
+include_once ("../config/database.php");
+
 
 function overlay_save($user, $over,$user_width, $user_height,$DB_DSN, $DB_USER, $DB_PASSWORD)
 {
@@ -7,11 +9,11 @@ function overlay_save($user, $over,$user_width, $user_height,$DB_DSN, $DB_USER, 
         $over = imagescale($over, $user_width, $user_height, IMG_BILINEAR_FIXED);
         imagecopymerge_alpha($user, $over, 0, 0, 0, 0, $user_width, $user_height, 100);
 
-        imagejpeg($user, "overlays/temp.jpeg");
+        imagejpeg($user, "temp.jpeg");
 
-        $image = file_get_contents('overlays/temp.jpeg');
+        $image = file_get_contents('temp.jpeg');
         $image = base64_encode($image);
-        eval("rm overlays/temp.jpeg");
+        //eval("rm temp.jpeg");
 
         try {
             $dpo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);

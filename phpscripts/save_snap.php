@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once ("config/database.php");
+include_once("../config/database.php");
 
 include_once "save_image.php";
 
@@ -13,6 +13,7 @@ if (isset($_SESSION['logged_on_user'])) {
         $user = imagecreatefromstring($user_str);
         imageflip($user,IMG_FLIP_HORIZONTAL);
         $over_location = str_replace("http://localhost:8080/camagru/","",$_POST['over_name']);
+        $over_location = "../".$over_location;
         $over = file_get_contents($over_location);
         $over = imagecreatefromstring($over);
         list($user_width, $user_height) = getimagesizefromstring($user_str);

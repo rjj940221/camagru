@@ -1,5 +1,5 @@
 <?php
-include_once("config/database.php");
+include_once("../config/database.php");
 session_start();
 $respons = array();
 if (isset($_SESSION['logged_on_user'])) {
