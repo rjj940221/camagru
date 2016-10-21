@@ -1,0 +1,22 @@
+<?php
+session_start();
+if (isset($_POST['image_id']) && isset($_SESSION['logged_on_user']))
+{
+    include_once('../config/database.php');
+    try{
+        $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $stat = $pdo->prepare("DELETE FROM `tb_images` WHERE `id`=:id AND `user_id`=:user_id;");
+        $stat->bindParam(':id', $_POST['image_id']);
+        $stat->bindParam(':user_id', $_SESSION['logged_on_user']);
+        $stat->execute();
+        echo "true";
+    }
+    catch (PDOException $e)
+    {
+        echo "false database exception\n";
+        echo $e->getMessage();
+    }
+}
+else
+    echo "false";
