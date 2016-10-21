@@ -22,7 +22,7 @@ include_once('header.php');
                 <div id='gallery_dialog_action'>
                     <?php
                     if (isset($_SESSION['logged_on_user'])) {
-                        echo "<button class='gallery_dialog_action' id='gallery_dialog_like'>like</button>";
+                        echo "<button class='gallery_dialog_action_btn' id='gallery_dialog_like'>like</button>";
                     } else
                         echo "login for more options"
                     ?>

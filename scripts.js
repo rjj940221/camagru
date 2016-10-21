@@ -20,7 +20,6 @@
             video = document.getElementById('video');
             canvas = document.createElement("CANVAS");
             over_pre = document.getElementById('over_pre');
-            //canvas = document.getElementById('canvas');
 
             startbutton = document.getElementById('startbutton');
             width = document.getElementById("camera").clientWidth;

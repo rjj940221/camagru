@@ -10,11 +10,10 @@ else{
     {
         print_r($_POST);
         $over_location = $_POST['overlay'];
-        $over_location = str_replace("http://localhost:8080/camagru/","",$over_location);
+        $over_location = str_replace("http://".$_SERVER['HTTP_HOST']."/camagru/","",$over_location);
         $over_location = "../".$over_location;
         echo "|".$over_location."|";
         $image = addslashes($_FILES['image']['tmp_name']);
-        $name = addslashes($_FILES['image']['name']);
         $image = file_get_contents($image);
         $user = imagecreatefromstring($image);
         list($user_width, $user_height) = getimagesize($_FILES['image']['tmp_name']);
